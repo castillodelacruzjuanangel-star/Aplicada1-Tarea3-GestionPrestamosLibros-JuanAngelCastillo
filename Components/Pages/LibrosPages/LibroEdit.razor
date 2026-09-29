@@ -1,0 +1,97 @@
+@page "/Libro/Edit/{LibroId:int}"
+@rendermode InteractiveServer
+@inject LibroServices libroServices
+@inject NavigationManager navigation
+
+@if(Mensaje != null)
+{
+    <label class="form-danger">@Mensaje</label>
+}
+
+<EditForm Model="libro" OnValidSubmit="Modificar" FormName="modificarLibro" method="post">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="container">
+        <div>
+            <div class="card-header text-center">
+                <h5 class="card-title">EDITAR DATOS DEL LIBRO</h5>
+            </div>
+
+            <div class="card shadow">
+
+                <div class="mb-3">
+                    <label class="form-label">ID</label>
+                    <InputNumber class="form-control" @bind-Value="libro!.LibroId" readonly></InputNumber>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Titulo</label>
+                    <InputText class="form-control" @bind-Value="libro.Titulo"></InputText>
+                    <ValidationMessage For="@(() => libro.Titulo)"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Autor</label>
+                    <InputText class="form-control" @bind-Value="libro.Autor"></InputText>
+                    <ValidationMessage For="@(() => libro.Autor)"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Año de publicacion</label>
+                    <InputNumber class="form-control" @bind-Value="libro.AnoPublicacion"></InputNumber>
+                    <ValidationMessage For="@(() => libro.AnoPublicacion)"/>
+                </div>
+
+            </div>
+
+            <div class="card-footer text-center mt-2">
+                <a href="/Libro/Index" class="btn btn-secondary"><span class="bi bi-arrow-left"></span> Volver</a>
+                <button type="submit" class="btn btn-success bi bi-floppy"> Guardar</button>
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar"> Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code{
+
+    [Parameter]
+    public int libroId{get; set;}
+    public Libro? libro{get; set;} = new Libro();
+    public List<Libro>listaLibros{get; set;} = [];
+    public string Mensaje{get; set;} = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        libro = await libroServices.Buscar(libroId);
+        listaLibros = await libroServices.Listar(l => l.LibroId > 0);
+    }
+
+    public async Task Modificar()
+    {
+        var modificado = await libroServices.Guardar(libro!);
+        if (modificado)
+        {
+            navigation.NavigateTo("/Libro/Index");
+        }
+        else
+        {
+            Mensaje = "No se pudo modificar los datos del libro " + libro!.Titulo;
+        }
+    }
+
+    public async Task Eliminar()
+    {
+        var eliminado = await libroServices.Eliminar(libroId);
+        if (eliminado)
+        {
+            navigation.NavigateTo("/Libro/Index");
+        }
+        else
+        {
+            Mensaje = "Ocurrio un error al eliminar el libro " + libro!.Titulo;            
+        }
+    }
+}
