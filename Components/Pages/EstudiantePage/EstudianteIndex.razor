@@ -1,0 +1,89 @@
+@page "/Estudiante/Index"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@inject EstudianteServices estudianteServices
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header d-flex justify-content-between align-center mb-4">
+            <h5 class="card-title">REGISTRO DE ESTUDIANTES</h5>
+            <a href="/Estudiante/Create" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span> Crear</a>
+        </div>
+
+        <div class="card body mb-2">
+            <div class="row">
+                <div class="col-3">
+                    <label class="col-form-label">Filtrar por</label>
+                </div>
+
+                <div class="col-4">
+                    <label class="col-form-label">Buscar</label>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-3">
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" selected disabled>Elegir una opcion</option>
+                        <option value="Nombre">Nombre</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-4">
+                    <div class="input-group">
+                        <input class="form-control" @bind-value="ValorFiltro" placeholder="Buscar"/>
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid mt-2">
+                <QuickGrid Items="@ItemIQueryable">
+                    <PropertyColumn Property="@(l => l.EstudianteId)" Sortable="true"/>
+                    <PropertyColumn Property="@(l => l.Nombre)" Sortable="true"/>
+                    <PropertyColumn Property="@(l => l.Email)" Sortable="true"/>
+                    <PropertyColumn Property="@(l => l.FechaNacimiento)" Sortable="true"/>
+                    <PropertyColumn Property="@(l => l.Direccion)" Sortable="true"/>
+                    <TemplateColumn Title="Opciones">
+                        <a href="/Estudiante/Edit/@context.EstudianteId" class="btn btn-outline-primary bi bi-pencil-square"></a>
+                    </TemplateColumn>
+                </QuickGrid>
+            </div>
+
+            <div class="card-footer d-flex justify-content-between align-center mb-4">
+                <label>cantidad: @ItemIQueryable?.Count()</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+    IQueryable<Estudiante>? ItemIQueryable;
+    public string Filtro{get; set;} = string.Empty;
+    public string ValorFiltro{get; set;} = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var item = await estudianteServices.GetList(e => e.EstudianteId > 0);
+        ItemIQueryable = item.AsQueryable();
+    }
+
+    public async Task Buscar() 
+    {
+        List<Estudiante> item = [];
+        if(ValorFiltro.Trim() != "")
+        {
+            if(Filtro == "Nombre")
+            {
+                item = await estudianteServices.GetList(e => e.Nombre.ToLower().Trim().Contains(ValorFiltro.ToLower().Trim()));
+            }
+        }
+        else
+        {
+            item = await estudianteServices.GetList(e => e.EstudianteId > 0);
+        }
+        ItemIQueryable = item.AsQueryable();
+    }
+}

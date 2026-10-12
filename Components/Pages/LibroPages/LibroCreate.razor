@@ -1,0 +1,63 @@
+@page "/Libro/Create"
+@rendermode InteractiveServer
+@attribute [StreamRendering]
+@inject NavigationManager navigation
+@inject LibroServices libroServices
+@inject ToastService toastService
+
+<EditForm Model="libro" OnValidSubmit="Guardar" FormName="agregarLibro" methd="post">
+    <DataAnnotationsValidator/>
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5 class="card-title">AGREGAR NUEVO LIBRO</h5>
+            </div>
+
+            <div class="card border-1 shadow"> 
+
+                <div class="mb-3">
+                    <label class="form-label">Titulo</label>
+                    <InputText class="form-control" @bind-Value="libro.Titulo"></InputText>
+                    <ValidationMessage For="@(() => libro.Titulo)"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Autor</label>
+                    <InputText class="form-control" @bind-Value="libro.Autor"></InputText>
+                    <ValidationMessage For="@(() => libro.Autor)"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Año de publicacion</label>
+                    <InputNumber class="form-control" @bind-Value="libro.AnoPublicacion"></InputNumber>
+                    <ValidationMessage For="@(() => libro.AnoPublicacion)"/>
+                </div>
+            </div>
+
+            <div class="card-footer text-center mt-2">
+                <a href="/Libro/Index" class="btn btn-secondary"><span class="bi bi-arrow-left"></span> Volver</a>
+                <button type="submit" class="btn btn-success bi bi-floppy"> Guardar</button>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code{
+    public Libro libro {get; set;} = new Libro();
+
+    public async Task Guardar()
+    {
+        var guardado = await libroServices.Guardar(libro);
+
+        if (guardado)
+        {
+            navigation.NavigateTo("/Libro/Index");
+        }
+        else
+        {
+            toastService.ShowError("Sucedio un error al guardar el libro");
+        }
+    }
+}

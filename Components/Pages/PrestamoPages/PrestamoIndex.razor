@@ -1,0 +1,94 @@
+@page "/Prestamo/Index"
+@rendermode InteractiveServer
+@inject PrestamoServices prestamoServices
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header d-flex justify-content-between align-center mb-4">
+            <h5 class="card-title">GESTION DE PRESTAMOS DE LIBROS</h5>
+            <a href="/Prestamo/Create" class="btn btn-primary"><span class="bi bi-plus-square"> Crear</span></a>
+        </div>
+
+        <div class="card body mb-2">
+            <div class="row">
+                <div class="col-3">
+                    <label class="col-form-label"><strong>Filtrar por</strong></label>
+                </div>
+
+                <div class="col-4">
+                    <label class="col-form-label"><strong>Buscar</strong></label>
+                </div>
+            </div>
+
+            <div class="row align-Items-center">
+                <div class="col-3">
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" selected-disabled>Seleccione un filtro</option>
+                        <option value="Cliente">Nombre del estudiante</option>
+                        <option value="Manga">Titulo del libro</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-4">
+                    <div class="input-group">
+                        <input class="form-control" @bind-value="ValorFiltro" placeholder="Buscar"/>
+                        <button class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid mt-2">
+                <QuickGrid Items="@ItemsIQueryable">
+                    <PropertyColumn Property="@(p => p.PrestamoId)" Sortable="true"/>
+                    <PropertyColumn Property="@(p => p.Estudiante!.Nombre)" Sortable="true"/>
+                    <PropertyColumn Property="@(p => p.EstudianteId)" Sortable="true"/>
+                    <PropertyColumn Property="@(p => p.Libro!.Titulo)" Sortable="true"/>
+                    <PropertyColumn Property="@(p => p.LibroId)" Sortable="true"/>
+                    <PropertyColumn Property="@(p => p.FechaPrestamo)" Sortable="true"/>
+
+                    <TemplateColumn Title="Opciones">
+                        <a href="/Prestamo/Edit/@context.PrestamoId" class="btn btn-outline-primary bi bi-pencil-square"></a>
+                    </TemplateColumn>
+                </QuickGrid>
+            </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-between align-center mb-4">
+            <label>Prestamos: @ItemsIQueryable?.Count()</label>
+        </div>
+    </div>
+</div>
+
+@code{
+    IQueryable<Prestamos>? ItemsIQueryable;
+    private string Filtro{get; set;} = string.Empty;
+    private string ValorFiltro{get; set;} = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var item = await prestamoServices.GetList(p => p.EstudianteId > 0);
+        ItemsIQueryable = item.AsQueryable();
+    }
+
+    private async Task Buscar()
+    {
+        List<Prestamos> item = [];
+
+        if(ValorFiltro.Trim() != "")
+        {
+            if(Filtro == "Cliente")
+            {
+                item = await prestamoServices.GetList(p => p.Estudiante!.Nombre.ToLower().Contains(ValorFiltro.ToLower().Trim()));
+            }
+            else if(Filtro == "Manga")
+            {
+                item = await prestamoServices.GetList(p => p.Libro!.Titulo!.ToLower().Contains(ValorFiltro.ToLower().Trim()));
+            }
+        }
+        else
+        {
+            item = await prestamoServices.GetList(p => p.PrestamoId > 0);
+        }
+        ItemsIQueryable = item.AsQueryable();
+    }
+}

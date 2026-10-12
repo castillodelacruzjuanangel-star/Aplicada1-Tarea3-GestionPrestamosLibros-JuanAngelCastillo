@@ -1,0 +1,96 @@
+@page "/Libro/Index"
+@rendermode InteractiveServer
+@inject LibroServices libroServices
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header d-flex justify-content-between align-center mb-4">
+            <h5 class="card-title">REGISTRO DE LIBROS</h5>
+            <a href="/Libro/Create" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span> Crear</a>
+        </div>
+
+        <div class="card body mb-2">
+
+            <div class="row">
+                <div class="col-3">
+                    <label class="col-form-label">Filtrar por</label>
+                </div>
+
+                <div class="col-4">
+                    <label class="col-form-label">Buscar</label>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+
+                <div class="col-3">
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" selected-disabled>Elegir un filtro</option>
+                        <option value="Titulo">Titulo</option>
+                        <option value="Autor">Autor</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-4">
+                    
+                    <div class="input-group">
+                        <input class="form-control" @bind-value="ValorFiltro" placeholder="Buscar"/>
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid mt-2">
+                <QuickGrid Items="@ItemIQueryable">
+                    <PropertyColumn Property="@(l => l.LibroId)" Sortable="true"/>
+                    <PropertyColumn Property="@(l => l.Titulo)" Sortable="true"/>
+                    <PropertyColumn Property="@(l => l.Autor)" Sortable="true"/>
+                    <PropertyColumn Property="@(l => l.AnoPublicacion)" Sortable="true"/>
+                    <PropertyColumn Property="@(l => l.EstaDisponible)" Sortable="true"/>
+                    <TemplateColumn Title="Opciones">
+                        <a href="/Libro/Edit/@context.LibroId" class="btn btn-outline-primary bi bi-pencil-square"></a>
+                    </TemplateColumn>
+                </QuickGrid> 
+            </div>
+
+        </div>
+        <div class="card-footer d-flex justify-content-between align-center mb-4">
+            <label>Cantidad: @ItemIQueryable?.Count()</label>
+        </div>
+    </div>
+</div>
+
+
+
+@code{
+    IQueryable<Libro>? ItemIQueryable;
+    public string Filtro{get; set;} = string.Empty;
+    public string ValorFiltro{get; set;} = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var item = await libroServices.GetList(l => l.LibroId > 0);
+        ItemIQueryable = item.AsQueryable();
+    }
+
+    public async Task Buscar()
+    {
+        List<Libro> item = [];
+        if(ValorFiltro.Trim() != "")
+        {
+            if(Filtro == "Titulo")
+            {
+                item = await libroServices.GetList(l => l.Titulo.ToLower().Trim().Contains(ValorFiltro.ToLower().Trim()));
+            }
+            else if(Filtro == "Autor")
+            {
+                item = await libroServices.GetList(l => l.Autor.ToLower().Trim().Contains(ValorFiltro.ToLower().Trim()));
+            }
+        }
+        else
+        {
+            item = await libroServices.GetList(l => l.LibroId > 0);
+        }
+        ItemIQueryable = item.AsQueryable();
+    }
+}

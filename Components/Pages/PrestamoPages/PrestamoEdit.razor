@@ -1,0 +1,121 @@
+@page "/Prestamo/Edit/{PrestamoId:int}"
+@rendermode InteractiveServer
+@inject ToastService toastService
+@inject NavigationManager navigation
+@inject LibroServices LibroServices
+@inject EstudianteServices estudianteServices
+@inject PrestamoServices prestamoServices
+
+<EditForm Model="Prestamo" OnValidSubmit="Modificar">
+    <DataAnnotationsValidator/>
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5 class="card-title">CREAR PRESTAMO</h5>
+            </div>
+
+            <div class="card body">
+                <div class="mb-3">
+                    <label class="form-label">Estudiante</label>
+                    <InputSelect class="form-select" @bind-Value="Prestamo.EstudianteId">
+                        <option value="0" selected disabled>Seleccione el estudiante</option>
+                        @foreach (var estudiante in listaEstudiantes)
+                        {
+                            <option value="@estudiante.EstudianteId">@estudiante.Nombre</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Libro</label>
+                    <InputSelect class="form-select" @bind-Value="Prestamo.LibroId">
+                        <option value="0" selected-disabled>Seleccione el libro</option>
+                        @foreach(var libro in listaLibros)
+                        {
+                            <option value="@libro.LibroId">@libro.Titulo</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Fecha del prestamo</label>
+                    <InputDate class="form-control" @bind-Value="Prestamo.FechaPrestamo"></InputDate>
+                    <ValidationMessage For="@(() => Prestamo.FechaPrestamo)"/>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-footer text-center mt-3">
+            <a href="/Prestamo/Index" class="btn btn-secondary"><span class="bi bi-arrow-left"> Volver</span></a>
+            <button type="submit" class="btn btn-success bi bi-floppy"> Modificar</button>
+            <button type="button" class="btn btn-danger bi bi-trash" data-bs-toggle="modal" data-bs-target="#ModalEliminar"> Eliminar</button>
+        </div>
+    </div>
+</EditForm>
+
+<div class="modal fade" id="ModalEliminar" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalEliminar">¿Esta seguro que desea eliminar el prestamo?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label class="form-label">Al eliminar, el prestamo se borrara permanentemente</label>
+            </div>
+            <div class="modal-footer">
+                <a href="/Prestamo/Index" class="btn btn-secondary">Volver</a>
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public int PrestamoId{get; set;}
+    public Prestamos Prestamo{get; set;} = new Prestamos();
+    public List<Estudiante> listaEstudiantes{get; set;} = [];
+    public List<Libro> listaLibros{get; set;} = [];
+    public List<Prestamos> listaPrestamos{get; set;} = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaPrestamos = await prestamoServices.GetList(p => p.PrestamoId > 0);
+        listaEstudiantes = await estudianteServices.GetList(c => c.EstudianteId > 0);
+        listaLibros = await LibroServices.GetList(m => m.LibroId > 0);
+        Prestamo = await prestamoServices.Buscar(PrestamoId) ?? new Prestamos();
+    }
+
+    private async Task Modificar()
+    {
+        var item = await prestamoServices.Guardar(Prestamo);
+        if (item)
+        {
+            toastService.ShowSuccess("Los cambios se han guardado correctamente");
+            navigation.NavigateTo("/Prestamo/Index");
+        }
+        else
+        {
+            toastService.ShowError("No fue posible guardar los cambios");
+        }
+    }
+
+    private async Task Eliminar()
+    {
+        var item = await prestamoServices.Eliminar(PrestamoId);
+        
+        if (item)
+        {
+            toastService.ShowSuccess("Se ha eliminardo correctamente");
+            navigation.NavigateTo("/Prestamo/Index");
+        }
+        else
+        {
+            toastService.ShowError("No fue posible eliminar el prestamo");
+        }
+    }
+}
