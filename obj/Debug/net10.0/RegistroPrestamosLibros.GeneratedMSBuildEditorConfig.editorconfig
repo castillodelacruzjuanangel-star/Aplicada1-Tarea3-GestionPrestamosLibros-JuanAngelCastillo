@@ -67,6 +67,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMaWJyb1BhZ2VzXExpYnJvSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Juan angel castillo/TareasAplicada/RegistroPrestamosLibros/Components/Pages/LibrosPages/LibroCreate.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMaWJyb3NQYWdlc1xMaWJyb0NyZWF0ZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Juan angel castillo/TareasAplicada/RegistroPrestamosLibros/Components/Pages/LibrosPages/LibroEdit.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMaWJyb3NQYWdlc1xMaWJyb0VkaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Juan angel castillo/TareasAplicada/RegistroPrestamosLibros/Components/Pages/LibrosPages/LibroIndex.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMaWJyb3NQYWdlc1xMaWJyb0luZGV4LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Juan angel castillo/TareasAplicada/RegistroPrestamosLibros/Components/Pages/NotFound.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3RGb3VuZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -81,6 +93,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Juan angel castillo/TareasAplicada/RegistroPrestamosLibros/Components/Pages/PrestamoPages/PrestamoIndex.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcmVzdGFtb1BhZ2VzXFByZXN0YW1vSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Juan angel castillo/TareasAplicada/RegistroPrestamosLibros/Components/Pages/PrestamosLibrosPages/PrestamoCreate.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcmVzdGFtb3NMaWJyb3NQYWdlc1xQcmVzdGFtb0NyZWF0ZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Juan angel castillo/TareasAplicada/RegistroPrestamosLibros/Components/Pages/PrestamosLibrosPages/PrestamoEdit.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcmVzdGFtb3NMaWJyb3NQYWdlc1xQcmVzdGFtb0VkaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Juan angel castillo/TareasAplicada/RegistroPrestamosLibros/Components/Pages/PrestamosLibrosPages/PrestamoIndex.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcmVzdGFtb3NMaWJyb3NQYWdlc1xQcmVzdGFtb0luZGV4LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Juan angel castillo/TareasAplicada/RegistroPrestamosLibros/Components/Routes.razor]
