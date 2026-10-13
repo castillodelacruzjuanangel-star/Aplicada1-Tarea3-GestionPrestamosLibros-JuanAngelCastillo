@@ -1,0 +1,141 @@
+@page "/Prestamo/Edit/{PrestamoId:int}"
+
+@rendermode InteractiveServer
+@inject PrestamoLibroServices prestamoLibroServices
+@inject LibroServices libroServices
+@inject EstudianteServices estudianteServices
+@inject NavigationManager navigation
+@inject ToastService toastService
+
+
+<EditForm Model="Prestamo" OnValidSubmit="Modificar">
+    <DataAnnotationsValidator/>
+
+    <div class="container">
+        <div class="card shadow-lg">
+
+            <div class="card-header text-center" >
+                <h5 class="card-title">CREAR PRESTAMO DE LIBRO</h5>
+            </div>
+
+            @*input*@
+            <div class="card border-1 shadow">
+
+                <div class="mb-3">
+                    @*libro*@
+                    <label class="form-label">ID</label>
+                    <InputNumber class="form-control" @bind-Value="Prestamo.PrestamoId" readonly></InputNumber>
+                </div>
+
+                <div class="mb-3">
+                    @*Prestatario o deudor*@
+                    <label class="form-label">Prestatario</label>
+                    <div class="input-group">
+                        <InputSelect class="form-select" @bind-Value="Prestamo.EstudianteId">
+                            <option value="" selected disabled>Seleccione al prestatario</option>
+                            @foreach(var estudiante in listaEstudiantes)
+                            {
+                                <option value="@estudiante.EstudianteId">@estudiante.Nombre</option>
+                            }
+                        </InputSelect>
+                        <a href="/Estudiante/Create" class="btn btn-outline-primary bi bi-plus-square"> Nuevo</a>
+                    </div>
+                    
+                </div>
+
+                <div class="mb-3">
+                    @*libro*@
+                    <label class="form-label">Libro</label>
+                    <InputSelect class="form-select" @bind-Value="Prestamo.LibroId">
+                        <option value="" selected disabled>Seleccione el libro</option>
+                        @foreach(var libro in listaLibros)
+                        {
+                            <option value="@libro.LibroId">@libro.Titulo</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    @*fecha de prestamo*@
+                    <label class="form-label">Fecha del prestamo</label>
+                    <InputDate class="form-control" @bind-Value="Prestamo.FechaPrestamo"></InputDate>
+                    <ValidationMessage For="@(() => Prestamo.FechaPrestamo)"/>
+                </div>
+
+            </div>
+        </div>
+        @*botones*@
+        <div class="card-footer text-center mt-3">
+            <a href="/Prestamo/Index" class="btn btn-secondary"><span class="bi bi-arrow-left"></span> Volver</a>
+            <button type="submit" class="btn btn-success bi bi-floppy"> Guardar</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalEliminar">Eliminar</button>
+        </div>
+    </div>
+
+</EditForm>
+
+@*modal*@
+<div class="modal fade" id="ModalEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">¿Esta seguro que desea eliminar el prestamo?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" @onclick="Eliminar">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@code{
+    [Parameter]
+    public int PrestamoId{get; set;}
+    public Prestamos Prestamo{get; set;} = new Prestamos();
+    public List<Prestamos> listaPrestamos{get; set;} = [];
+    public List<Libro> listaLibros{get; set;} = [];
+    public List<Estudiante> listaEstudiantes{get; set;} = [];
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Prestamo = await prestamoLibroServices.Buscar(PrestamoId);
+        listaPrestamos = await prestamoLibroServices.GetList(e => e.EstudianteId > 0);
+    }
+
+    private async Task Modificar()
+    {
+        var prestamoModificado = await prestamoLibroServices.Guardar(Prestamo);
+        if (prestamoModificado)
+        {
+            toastService.ShowSuccess("Se han guardado los cambios carrectamente");
+            navigation.NavigateTo("/Prestamo/Index");
+        }
+        else
+        {
+            toastService.ShowError("Error al modificar el prestamo");
+        }
+    }
+
+    private async Task Eliminar()
+    {
+        var prestamoEliminado = await prestamoLibroServices.Eliminar(PrestamoId);
+        if (prestamoEliminado)
+        {
+            toastService.ShowSuccess("Se ha eliminado el prestamo");
+            navigation.NavigateTo("/Prestamo/Index");
+        }
+        else
+        {
+            toastService.ShowError("Error al eliminar el prestamo");
+        }
+    }
+}
+

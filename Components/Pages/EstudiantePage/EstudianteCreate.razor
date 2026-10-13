@@ -1,5 +1,6 @@
 @page "/Estudiante/Create"
 @rendermode InteractiveServer
+<<<<<<< HEAD
 @inject EstudianteServices estudianteServices
 @inject NavigationManager navigation
 @inject ToastService toastService
@@ -11,11 +12,36 @@
 
     <div class="container">
         <div class="card shadow-lg">
+=======
+@attribute [StreamRendering]
+@inject EstudianteServices estudianteServices
+@inject NavigationManager navigation
+
+<PageTitle>Añadir estudiante</PageTitle>
+
+@if (!string.IsNullOrEmpty(Mensaje))
+{
+    <div class=" alert alert-danger text-danger">
+        @Mensaje
+    </div>
+}
+
+<EditForm Model="estudiante" OnValidSubmit="Guardar" FormName="crearEstudiante">
+    <DataAnnotationsValidator/>
+
+    <div class="container">
+        <div class="card shadow">
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
             <div class="card-header text-center">
                 <h5 class="card-title">AGREGAR NUEVO ESTUDIANTE</h5>
             </div>
 
+<<<<<<< HEAD
             <div class="card-body"> 
+=======
+            <div class="card-body">
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
                 <div class="mb-3">
                     <label class="form-label">Nombre</label>
                     <InputText class="form-control" @bind-Value="estudiante.Nombre"></InputText>
@@ -42,16 +68,29 @@
             </div>
 
             <div class="card-footer text-center mt-2">
+<<<<<<< HEAD
                 <a href="/Estudiante/Index" class="btn btn-secondary"><span class="bi bi-arrow-left"></span>Volver</a>
                 <button type="submit" class="btn btn-success bi bi-floppy">Guardar</button>
             </div>
+=======
+                <a href="/Prestamo/Create" class="btn btn-secondary"><span class="bi bi-arrow-left"></span>Volver</a>
+                <button type="submit" class="btn btn-success bi bi-floppy">Guardar</button>
+            </div>
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
         </div>
     </div>
 
 </EditForm>
 
 @code{
+<<<<<<< HEAD
     public Estudiante estudiante{get; set;} = new Estudiante();
+=======
+    [SupplyParameterFromForm]
+    public Estudiante estudiante{get; set;} = new Estudiante();
+    public string Mensaje{get; set;} = string.Empty;
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 
     public async Task Guardar()
     {
@@ -63,7 +102,11 @@
         }
         else
         {
+<<<<<<< HEAD
             toastService.ShowError("Error al guardar los datos del estudiante");
+=======
+            Mensaje = "Error al guardar los datos del estudiante";
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
         }
     }
 

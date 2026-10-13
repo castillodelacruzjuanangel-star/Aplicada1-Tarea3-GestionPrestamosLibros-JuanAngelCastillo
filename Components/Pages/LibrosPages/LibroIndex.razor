@@ -1,0 +1,121 @@
+@page "/Libro/Index"
+
+@rendermode InteractiveServer
+@inject Services.LibroServices libroServices
+
+<div class="container">
+    <div>
+        <div class="card-header d-flex justify-content-between align-center mb-4">
+            <h5 class="card-title">REGISTRO DE LIBROS</h5>
+            <a href="/Libro/Create" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span> Agregar</a>
+        </div>
+
+        <div class="card body">
+
+            <div class="row">
+                <div class="col-3">
+                    <label class="col-form-label">Filtrar por</label>
+                </div>
+
+                <div class="col-4">
+                    <label class="col-form-label">Buscar</label>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+
+                <div class="col-3">
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" selected disabled>Elegir un filtro</option>
+                        <option value="Titulo">Titulo</option>
+                        <option value="Autor">Autor</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-4">
+                    
+                    <div class="input-group">
+                        <input class="form-control" @bind-value="ValorFiltro" placeholder="Buscar"/>
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+
+            </div>
+
+            <table class="table table-hover">
+                <thead class="table table-striped">
+                    <tr>
+                        <th>ID</th>
+                        <th>Titulo</th>
+                        <th>Autor</th>
+                        <th>Año de publicacion</th>
+                        <th>Estado</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var libro in listaLibros)
+                    {
+                        <tr>
+                           <td>@libro.LibroId</td>
+                           <td>@libro.Titulo</td>
+                           <td>@libro.Autor</td>
+                           <td>@libro.AnoPublicacion</td>
+                            @if (libro.EstaDisponible)
+                            {
+                                <td>Disponible</td>
+                            }
+                            else
+                            {
+                                <td>No disponible</td>
+                            }
+                            <td class="text-center">
+                                <a href="/Libro/Edit/@libro.LibroId" class="btn btn-outline-primary bi bi-pencil-square"></a>
+                           </td> 
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+            <div class="card-footer d-flex justify-content-between align-center mb-1">
+                <label>Cantidad: @listaLibros.Count()</label>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code{
+
+    public List<Libro> listaLibros{get; set;} = [];
+    public Libro libro{get; set;} = new Libro();
+    public string Filtro{get; set;} = string.Empty;
+    public string ValorFiltro{get; set;} = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaLibros = await libroServices.Listar(l => l.LibroId > 0);
+    }
+
+    public async Task Buscar()
+    {
+        if(ValorFiltro.Trim() != "")
+        {
+            if(Filtro == "Titulo")
+            {
+                listaLibros = await libroServices.Listar(l => l.Titulo.ToLower().Trim().Contains(ValorFiltro.ToLower().Trim()));
+            }
+            else if(Filtro == "Autor")
+            {
+                listaLibros = await libroServices.Listar(l => l.Autor.ToLower().Trim().Contains(ValorFiltro.ToLower().Trim()));
+            }
+            
+        }
+        else
+        {
+            listaLibros = await libroServices.Listar(l => l.LibroId > 0);
+        }
+    }
+
+}

@@ -6,6 +6,7 @@
 @inject EstudianteServices estudianteServices
 
 <div class="container">
+<<<<<<< HEAD
     <div class="card shadow-lg">
         <div class="card-header d-flex justify-content-between align-center mb-4">
             <h5 class="card-title">REGISTRO DE ESTUDIANTES</h5>
@@ -13,6 +14,16 @@
         </div>
 
         <div class="card body mb-2">
+=======
+    <div >
+        <div class="card-header d-flex justify-content-between align-center mb-4">
+            <h5 class="card-title">REGISTRO DE ESTUDIANTES</h5>
+            <a href="/Estudiante/Create" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span> Agregar</a>
+        </div>
+
+        <div class="card body mb-2">
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
             <div class="row">
                 <div class="col-3">
                     <label class="col-form-label">Filtrar por</label>
@@ -24,6 +35,10 @@
             </div>
 
             <div class="row align-items-center">
+<<<<<<< HEAD
+=======
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
                 <div class="col-3">
                     <InputSelect class="form-select" @bind-Value="Filtro">
                         <option value="" selected disabled>Elegir una opcion</option>
@@ -32,10 +47,15 @@
                 </div>
 
                 <div class="col-4">
+<<<<<<< HEAD
+=======
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
                     <div class="input-group">
                         <input class="form-control" @bind-value="ValorFiltro" placeholder="Buscar"/>
                         <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
                     </div>
+<<<<<<< HEAD
                 </div>
             </div>
 
@@ -55,17 +75,65 @@
             <div class="card-footer d-flex justify-content-between align-center mb-4">
                 <label>cantidad: @ItemIQueryable?.Count()</label>
             </div>
+=======
+
+                </div>
+
+            </div>
+
+            <table class="table table-hover">
+                <thead class="table table-striped">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Direccion</th>
+                        <th>Email</th>
+                        <th>Fecha de nacimiento</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var estudiante in listaEstudiantes)
+                    {
+                        <tr>
+                            <td>@estudiante.EstudianteId</td>
+                            <td>@estudiante.Nombre</td>
+                            <td>@estudiante.Direccion</td>
+                            <td>@estudiante.Email</td>
+                            <td>@estudiante.FechaNacimiento</td>
+
+                            <td class="text-center">
+                                <a href="/Estudiante/Edit/@estudiante.EstudianteId" class="btn btn-outline-primary bi bi-pencil-square"></a>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+
+            <div class="card-footer d-flex justify-content-between align-center mb-1">
+                <label>cantidad: @listaEstudiantes.Count()</label>
+            </div>
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
         </div>
     </div>
 </div>
 
 @code{
+<<<<<<< HEAD
     IQueryable<Estudiante>? ItemIQueryable;
+=======
+
+    public List<Estudiante> listaEstudiantes = [];
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
     public string Filtro{get; set;} = string.Empty;
     public string ValorFiltro{get; set;} = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
+<<<<<<< HEAD
         var item = await estudianteServices.GetList(e => e.EstudianteId > 0);
         ItemIQueryable = item.AsQueryable();
     }
@@ -73,17 +141,42 @@
     public async Task Buscar() 
     {
         List<Estudiante> item = [];
+=======
+        listaEstudiantes = await estudianteServices.Listar(e => e.EstudianteId > 0);
+    }
+
+    public async Task Buscar()
+    {
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
         if(ValorFiltro.Trim() != "")
         {
             if(Filtro == "Nombre")
             {
+<<<<<<< HEAD
                 item = await estudianteServices.GetList(e => e.Nombre.ToLower().Trim().Contains(ValorFiltro.ToLower().Trim()));
+=======
+                listaEstudiantes = await estudianteServices.Listar(e => e.Nombre.ToLower().Trim().Contains(ValorFiltro.ToLower().Trim()));
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
             }
         }
         else
         {
+<<<<<<< HEAD
             item = await estudianteServices.GetList(e => e.EstudianteId > 0);
         }
         ItemIQueryable = item.AsQueryable();
     }
 }
+=======
+            listaEstudiantes = await estudianteServices.Listar(e => e.EstudianteId > 0);
+        }
+    }
+
+    public async Task Restablecer()
+    {
+        listaEstudiantes = await estudianteServices.Listar(e => e.EstudianteId > 0);
+        ValorFiltro = string.Empty;
+        Filtro = string.Empty;
+    }
+}
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f

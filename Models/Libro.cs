@@ -1,6 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
+<<<<<<< HEAD
 namespace RegistroPrestamosLibros.Models;
+=======
+namespace Models;
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 
 public class Libro
 {
@@ -15,6 +19,11 @@ public class Libro
     
     [Range(1, 2026, ErrorMessage = "Por favor, ingresar un año valido")]
     public int AnoPublicacion{get; set;}
+<<<<<<< HEAD
     public int CantidadDisponible{get; set;}
     public bool EstaDisponible{get; set;} = true;
+=======
+    public bool EstaDisponible{get; set;} = true;
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 }

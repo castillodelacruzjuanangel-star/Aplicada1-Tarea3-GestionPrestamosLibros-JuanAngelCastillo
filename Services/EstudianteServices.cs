@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+<<<<<<< HEAD
 using RegistroPrestamosLibros.Context;
 using RegistroPrestamosLibros.Models;
 
@@ -7,6 +8,21 @@ namespace RegistroPrestamosLibros.Services;
 
 public class EstudianteServices(IDbContextFactory<Contexto> DbFactory)
 {
+=======
+using Context;
+using Models;
+
+namespace Services;
+
+public class EstudianteServices(IDbContextFactory<Contexto> DbFactory)
+{
+    public async Task<bool> Existe(string nombre)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.Estudiantes.AnyAsync(e => e.Nombre.ToLower().Trim().Equals(nombre.ToLower().Trim()));
+    }
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
     public async Task<bool> Guardar(Estudiante estudiante)
     {
         if(!await Existe(estudiante.Nombre))
@@ -19,12 +35,15 @@ public class EstudianteServices(IDbContextFactory<Contexto> DbFactory)
         }
     }
 
+<<<<<<< HEAD
     public async Task<bool> Existe(string nombre)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Estudiantes.AnyAsync(e => e.Nombre.ToLower().Trim().Equals(nombre.ToLower().Trim()));
     }
 
+=======
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
     public async Task<bool> Insertar(Estudiante estudiante)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -51,6 +70,7 @@ public class EstudianteServices(IDbContextFactory<Contexto> DbFactory)
         return await contexto.Estudiantes.FirstOrDefaultAsync(e => e.EstudianteId == estudianteId);
     }
 
+<<<<<<< HEAD
     public async Task<List<Estudiante>> GetList(Expression<Func<Estudiante,bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -59,4 +79,12 @@ public class EstudianteServices(IDbContextFactory<Contexto> DbFactory)
         .AsNoTracking()
         .ToListAsync();
     }
+=======
+    public async Task<List<Estudiante>> Listar(Expression<Func<Estudiante,bool>> criterio)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.Estudiantes.Where(criterio).ToListAsync();
+    }
+    
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 }

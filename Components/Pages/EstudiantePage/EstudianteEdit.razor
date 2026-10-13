@@ -2,7 +2,10 @@
 @rendermode InteractiveServer
 @inject EstudianteServices estudianteServices
 @inject NavigationManager navigation
+<<<<<<< HEAD
 @inject ToastService toastService
+=======
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 
 
 <EditForm Model="estudiante" OnValidSubmit="Modificar" FormName="editarEstudiante" method="post">
@@ -10,7 +13,11 @@
     <ValidationSummary/>
 
     <div class="container">
+<<<<<<< HEAD
         <div class="card shadow-lg">
+=======
+        <div>
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
             <div class="card-header text-center">
                 <h5 class="card-title">EDITAR DATOS DEL ESTUDIANTE</h5>
             </div>
@@ -18,7 +25,11 @@
             <div class="card-body">
                 <div class="mb-4">
                     <label class="form-label">Id</label>
+<<<<<<< HEAD
                     <InputNumber class="form-control" @bind-Value="estudiante.EstudianteId" readonly></InputNumber>
+=======
+                    <InputNumber class="form-control" @bind-Value="estudiante!.EstudianteId" readonly></InputNumber>
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
                 </div>
 
                 <div class="mb-3">
@@ -49,6 +60,7 @@
             <div class="card-footer text-center mt-2">
                 <a href="/Estudiante/Index" class="btn btn-secondary"><span class="bi bi-arrow-left"></span>Volver</a>
                 <button type="submit" class="btn btn-success bi bi-floppy">Guardar</button>
+<<<<<<< HEAD
                 <button type="button" class="btn btn-danger bi bi-trash" data-bs-toggle="Modal" data-bs-target="#ModalEliminar">Eliminar</button>
             </div>
         </div>
@@ -74,10 +86,20 @@
         </div>
     </div>
 </div>
+=======
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar">Eliminar</button>
+            </div>
+
+        </div>
+    </div>
+
+</EditForm>
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 
 @code{
     [Parameter]
     public int EstudianteId{get; set;}
+<<<<<<< HEAD
     public Estudiante estudiante{get; set;} = new Estudiante();
     public List<Estudiante> listaEstudiantes = [];
 
@@ -85,11 +107,25 @@
     { 
         estudiante = await estudianteServices.Buscar(EstudianteId) ?? new Estudiante();
         listaEstudiantes = await estudianteServices.GetList(l => l.EstudianteId > 0);
+=======
+    public Estudiante? estudiante{get; set;} = new Estudiante();
+    public List<Estudiante> listaEstudiantes = [];
+    public string Mensaje{get; set;} = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        estudiante = await estudianteServices.Buscar(EstudianteId);
+        listaEstudiantes = await estudianteServices.Listar(l => l.EstudianteId > 0);
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
     }
 
     public async Task Modificar()
     {
+<<<<<<< HEAD
         var modificado = await estudianteServices.Modificar(estudiante);
+=======
+        var modificado = await estudianteServices.Modificar(estudiante!);
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 
         if (modificado)
         {
@@ -97,13 +133,21 @@
         }
         else
         {
+<<<<<<< HEAD
             toastService.ShowError("Error al guardar los cambios");
+=======
+            Mensaje = "Error al guardar los cambios";
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
         }
     }
 
     public async Task Eliminar()
     {
+<<<<<<< HEAD
         var eliminado =  await estudianteServices.Eliminar(estudiante.EstudianteId);
+=======
+        var eliminado =  await estudianteServices.Eliminar(estudiante!.EstudianteId);
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 
         if (eliminado)
         {
@@ -111,7 +155,11 @@
         }
         else
         {
+<<<<<<< HEAD
             toastService.ShowError("Error al eliminar el estudiante");
+=======
+            Mensaje = "Error al eliminar el estudiante";
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
         }
     }
 }

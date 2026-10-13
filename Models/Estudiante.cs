@@ -1,6 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
+<<<<<<< HEAD
 namespace RegistroPrestamosLibros.Models;
+=======
+namespace Models;
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 
 public class Estudiante
 {
@@ -18,6 +22,11 @@ public class Estudiante
     public string Email{get; set;} = string.Empty;
 
     [Range(typeof(DateOnly), "1950-01-01", "2026-12-31", ErrorMessage = "Por favor, ingrese una fecha entre 1950 y 2026.")]
+<<<<<<< HEAD
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateOnly FechaNacimiento{get; set;}
+=======
+    public DateOnly? FechaNacimiento{get; set;}
+
+>>>>>>> b077bcd8b94ade1afe424741f764a76ebf130d9f
 }
